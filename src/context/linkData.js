@@ -4,20 +4,10 @@ export const linkData = [
     text: "home",
     path: "/",
   },
-  {
-    id: 2,
-    text: "about",
-    path: "/about",
-  },
-  {
-    id: 3,
-    text: "preview products",
-    path: "/customers",
-  },
 
   {
-    id: 4,
-    text: "products list",
+    id: 2,
+    text: "customersList",
     path: "/customers-list",
   },
 ];

@@ -1,24 +1,27 @@
 import React from "react";
 import { injectIntl } from "react-intl";
 
-const ProductListColumns = (props) => {
+const CustomerListColumns = (props) => {
   const {
     intl: { formatMessage },
   } = props;
   return (
-    <div className="container-fluid text-center d-none d-lg-block mt-5">
+    <div
+      className="container-fluid text-center d-none d-lg-block"
+      style={{ borderBottom: "2px solid var(--primaryColor)" }}
+    >
       <div className="row">
         <div className="col-lg-10">
           <div className="row">
             <div className="col-lg-2">
               <p className="text-uppercase font-weight-bold">
-                {formatMessage({ id: "Full Name" })}
+                {formatMessage({ id: "fullName" })}
               </p>
             </div>
 
             <div className="col-lg-2">
               <p className="text-uppercase font-weight-bold">
-                {formatMessage({ id: "Email" })}
+                {formatMessage({ id: "email" })}
               </p>
             </div>
 
@@ -55,4 +58,4 @@ const ProductListColumns = (props) => {
   );
 };
 
-export default injectIntl(ProductListColumns);
+export default injectIntl(CustomerListColumns);

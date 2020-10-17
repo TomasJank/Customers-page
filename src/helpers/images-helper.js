@@ -11,7 +11,7 @@ import mainBcg from "../assets/images/mainBcg.jpeg";
 import productsBcg from "../assets/images/productsBcg.jpeg";
 import singleProductBcg from "../assets/images/singleProductBcg.jpeg";
 import storeBcg from "../assets/images/storeBcg.jpeg";
-import addUser from "../assets/images/addUser.svg"
+import customerBcg from "../assets/images/customerPage.jpg"
 
 export {
   // ==== Common images ====
@@ -19,7 +19,7 @@ export {
   infoSection,
   plus,
   noImage,
-  addUser,
+  customerBcg,
   // ==== Common images ====
 
   // ==== Backgrounds ====

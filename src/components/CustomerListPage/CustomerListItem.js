@@ -1,16 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { injectIntl } from "react-intl";
 import { Link } from "react-router-dom";
 // ==== Icons ====
 import { FaTrash, FaEye, FaEdit } from "react-icons/fa";
 // ==== Icons ====
 
-const ProductListItem = ({
+const CustomerListItem = ({
   customer,
   increment,
   decrement,
   removeItem,
-  setSingleProduct,
+  setSingleCustomer,
   ...props
 }) => {
   const { id, name, email, city, street, houseNumber, zip } = customer;
@@ -20,19 +20,21 @@ const ProductListItem = ({
   } = props;
 
   return (
-    <div className="row mt-5 mt-lg-0 text-capitalize text-center align-items-center">
+    <div className="row text-capitalize text-center align-items-center mt-1 mb-4 mb-md-2 mb-sm-4">
       <div className="col-lg-10">
         <div className="row">
           <div className="col-12 col-lg-2">
-            <span className="d-lg-none">
-              {formatMessage({ id: "Full Name" })} :{" "}
-            </span>
-            {name}
+            <Link to={`/customer/${id}`}>
+              <span className="d-lg-none">
+                {formatMessage({ id: "fullName" })} :{" "}
+              </span>
+              <span onClick={() => setSingleCustomer(id)}> {name}</span>
+            </Link>
           </div>
 
           <div className="col-12 col-lg-2">
             <span className="d-lg-none">
-              {formatMessage({ id: "Email" })} :{" "}
+              {formatMessage({ id: "email" })} :{" "}
             </span>
             {email}
           </div>
@@ -67,25 +69,26 @@ const ProductListItem = ({
       <div className="col-lg-2">
         <div className="row">
           <div className="col-12">
-            <Link to={`/products/${id}`}>
+            <Link to={`/customer/${id}`}>
               <FaEye
-                className="cart-icon mr-2"
-                onClick={() => setSingleProduct(id)}
+                className="mr-2"
+                onClick={() => setSingleCustomer(id)}
                 size={20}
                 title={formatMessage({ id: "viewProduct" })}
               />
             </Link>
 
-            <Link to={`/products/${id}/edit`}>
+            <Link to={`/customer/${id}/edit`}>
               <FaEdit
-                className="cart-icon mr-2"
-                onClick={() => setSingleProduct(id)}
+                className="mr-2"
+                onClick={() => setSingleCustomer(id)}
                 size={20}
                 title={formatMessage({ id: "editProduct" })}
               />
             </Link>
             <FaTrash
               className="text-danger cart-icon"
+              style={{ cursor: "pointer" }}
               onClick={() => removeItem(id)}
               size={20}
               title={formatMessage({ id: "deleteProduct" })}
@@ -97,4 +100,4 @@ const ProductListItem = ({
   );
 };
 
-export default injectIntl(ProductListItem);
+export default injectIntl(CustomerListItem);

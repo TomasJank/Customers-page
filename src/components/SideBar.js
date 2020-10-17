@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { injectIntl } from "react-intl";
 // ==== Context API ====
 import { ProductConsumer } from "../context";
-import SideBarIcons from "./ProductsPage/SideBarIcons";
+import SideBarIcons from "./CustomersPage/SideBarIcons";
 // ==== Context API ====
 const SideBar = (props) => {
   return (
@@ -30,7 +30,7 @@ const SideBar = (props) => {
                         <SideBarIcons
                           iconType={link.text}
                           size={20}
-                          color={"#5fb7ea"}
+                          color={"var(--mainBlack)"}
                         />
                         <div className="ml-2">
                           {formatMessage({ id: `${link.text}` })}
@@ -55,7 +55,7 @@ const SideWrapper = styled.nav`
   height: 100%;
   background: var(--mainGrey);
   z-index: 1;
-  border-right: 4px solid var(--primaryColor);
+  border-right: 4px solid var(--darkGrey);
   transition: var(--mainTransition);
   transform: ${(props) => (props.show ? "translateX(0)" : "translateX(-100%)")};
 
@@ -71,6 +71,7 @@ const SideWrapper = styled.nav`
     color: var(--mainBlack);
     padding: 0.5rem 1.5rem;
     background: transparent;
+    box-shadow:0px 1px 1px rgba(0, 0, 0, 0.3);
     transition: var(--mainTransition);
   }
   .sidebar-link:hover {

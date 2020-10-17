@@ -1,33 +1,37 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { injectIntl } from "react-intl";
 import styled from "styled-components";
-import { Input, Checkbox, Row, Form, Upload, Modal, message } from "antd";
+import { Input, Form, message } from "antd";
 import { Link, Redirect } from "react-router-dom";
+
+// ==== Icons ====
+import { AiFillMail, AiOutlineUser } from "react-icons/ai";
+import { FaCity, FaStreetView, FaMapMarkerAlt } from "react-icons/fa";
+import { BsFillHouseDoorFill } from "react-icons/bs";
+// ==== Icons ====
 
 // ==== Components ====
 import Hero from "../components/Hero";
 // ==== Components ====
 
 // ==== Helpers ====
-import { singleProductBcg, addUser } from "../helpers/images-helper";
+import { customerBcg } from "../helpers/images-helper";
 // ==== Helpers ====
 
 // ==== Context API ====
-import { ProductConsumer } from "../context";
+import { ProductConsumer } from "../context/context";
 // ==== Context API ====
 
-const CreateProductPage = (props) => {
+const CreateCustomerPage = (props) => {
   const [form] = Form.useForm();
 
-  // const { getFieldDecorator, getFieldValue } = props.form;
   const [redirect, setRedirect] = useState(false);
 
   const {
     intl: { formatMessage },
   } = props;
 
-
-  const onAddressNotFound =()=>{
+  const onAddressNotFound = () => {
     message.warning(
       "The address cannot be found, please type in a valid address"
     );
@@ -49,29 +53,30 @@ const CreateProductPage = (props) => {
         errors: ["Zip code might be invalid"],
       },
     ]);
-  }
+  };
 
-  const handleSubmit = async (values, addNewProduct, validateAddress) => {
-    console.log("new values are", values);
-    const { city, street, houseNumber, zip } = values;
+  const emailValidator = async (_, value) => {
+    const emailRegexTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
+      value
+    );
 
-    if(await validateAddress(`${city}, ${street}, ${houseNumber}, ${zip}`)){
-    // if (false) {
-      console.log("its true");
-      addNewProduct(values);
-      setRedirect(true);
-    } else {
-      console.log("invalid address", props, form);
-      onAddressNotFound();
+    if (!value) {
+      throw new Error("fieldCannotBeEmpty");
+    } else if (!emailRegexTest) {
+      throw new Error("Invalid email format");
     }
   };
 
-  // const onAddressValidator = async() =>{
+  const handleSubmit = async (values, addNewProduct, validateAddress) => {
+    const { city, street, houseNumber, zip } = values;
 
-  //   if (!validAddress) {
-  //     throw new Error("bad email format");
-  //   }
-  // }
+    if (await validateAddress(`${city}, ${street}, ${houseNumber}, ${zip}`)) {
+      addNewProduct(values);
+      setRedirect(true);
+    } else {
+      onAddressNotFound();
+    }
+  };
 
   if (redirect) {
     return <Redirect push to={{ pathname: "/customers-list" }} />;
@@ -79,13 +84,10 @@ const CreateProductPage = (props) => {
 
   return (
     <div>
-      <Hero
-        img={singleProductBcg}
-        title={formatMessage({ id: "creteProduct" })}
-      />
+      <Hero img={customerBcg} />
       <ProductConsumer>
         {(value) => {
-          const { addNewProduct, validateAddress, loadPage } = value;
+          const { addNewProduct, validateAddress } = value;
           return (
             <StyledForm
               form={form}
@@ -93,22 +95,15 @@ const CreateProductPage = (props) => {
                 handleSubmit(values, addNewProduct, validateAddress)
               }
               scrollToFirstError
-              initialValues={{
-                featured: false,
-                freeShipping: false,
-                active: false,
-              }}
             >
-              <section className="py-5">
+              <section>
                 <div className="container">
-                  <div className="row">
-                    <div className="col-10 mx-auto col-sm-8 col-md-6 my-3 ">
-                      <img src={addUser} />
-                    </div>
-                    <div className="col-10 mx-auto col-sm-8 col-md-6 my-3 ">
+                  <div className="d-flex justify-content-center">
+                    <div className="col-10 mx-auto col-sm-8 col-md-6 my-5">
                       <h5 className="mb-4 text-capitalize">
-                        <div className="text-title">
-                          {formatMessage({ id: "Name" })}:{" "}
+                        <div className="col text-title text-center mb-5">
+                          {" "}
+                          Register a new customer
                         </div>
                         <span>
                           <Form.Item
@@ -122,36 +117,37 @@ const CreateProductPage = (props) => {
                               },
                             ]}
                           >
-                            <Input maxLength={40} />
+                            <Input
+                              prefix={<AiOutlineUser className="mr-2" />}
+                              maxLength={40}
+                              placeholder="Full Name"
+                            />
                           </Form.Item>
                         </span>
                       </h5>
 
                       <h5 className="text-capitalize mb-4">
-                        <div className="text-title">
-                          {formatMessage({ id: "email" })}:{" "}
-                        </div>
                         <span>
                           <Form.Item
                             name="email"
                             rules={[
                               {
                                 required: true,
-                                message: formatMessage({
-                                  id: "fieldCannotBeEmpty",
-                                }),
+
+                                validator: emailValidator,
                               },
                             ]}
                           >
-                            <Input maxLength={40} />
+                            <Input
+                              prefix={<AiFillMail className="mr-2" />}
+                              maxLength={40}
+                              placeholder="Email address"
+                            />
                           </Form.Item>
                         </span>
                       </h5>
 
                       <h5 className="text-capitalize mb-4">
-                        <div className="text-title">
-                          {formatMessage({ id: "city" })}:{" "}
-                        </div>
                         <span>
                           <Form.Item
                             name="city"
@@ -161,19 +157,19 @@ const CreateProductPage = (props) => {
                                 message: formatMessage({
                                   id: "fieldCannotBeEmpty",
                                 }),
-                                // validator:onAddressValidator
                               },
                             ]}
                           >
-                            <Input maxLength={40} />
+                            <Input
+                              prefix={<FaCity className="mr-2" />}
+                              maxLength={40}
+                              placeholder="City"
+                            />
                           </Form.Item>
                         </span>
                       </h5>
 
                       <h5 className="text-capitalize mb-4">
-                        <div className="text-title">
-                          {formatMessage({ id: "street" })}:{" "}
-                        </div>
                         <span>
                           <Form.Item
                             name="street"
@@ -187,15 +183,16 @@ const CreateProductPage = (props) => {
                               },
                             ]}
                           >
-                            <Input maxLength={40} />
+                            <Input
+                              prefix={<FaStreetView className="mr-2" />}
+                              maxLength={40}
+                              placeholder="Street"
+                            />
                           </Form.Item>
                         </span>
                       </h5>
 
                       <h5 className="text-capitalize mb-4">
-                        <div className="text-title">
-                          {formatMessage({ id: "houseNumber" })}:{" "}
-                        </div>
                         <span>
                           <Form.Item
                             name="houseNumber"
@@ -205,19 +202,19 @@ const CreateProductPage = (props) => {
                                 message: formatMessage({
                                   id: "fieldCannotBeEmpty",
                                 }),
-                                // validator:onAddressValidator
                               },
                             ]}
                           >
-                            <Input maxLength={40} />
+                            <Input
+                              prefix={<BsFillHouseDoorFill className="mr-2" />}
+                              maxLength={40}
+                              placeholder="House Number"
+                            />
                           </Form.Item>
                         </span>
                       </h5>
 
                       <h5 className="text-capitalize mb-4">
-                        <div className="text-title">
-                          {formatMessage({ id: "zip" })}:{" "}
-                        </div>
                         <span>
                           <Form.Item
                             name="zip"
@@ -227,30 +224,33 @@ const CreateProductPage = (props) => {
                                 message: formatMessage({
                                   id: "fieldCannotBeEmpty",
                                 }),
-                                // validator:onAddressValidator
                               },
                             ]}
                           >
-                            <Input maxLength={40} />
+                            <Input
+                              prefix={<FaMapMarkerAlt className="mr-2" />}
+                              maxLength={40}
+                              placeholder="Zip code"
+                            />
                           </Form.Item>
                         </span>
                       </h5>
-
-                      <button
-                        // type="button"
-                        htmltype="submit"
-                        className="main-link"
-                        style={{ margin: "0.75rem" }}
-                      >
-                        {formatMessage({ id: "saveChanges" })}{" "}
-                      </button>
-                      <Link
-                        to={`/customers-list`}
-                        className="main-link"
-                        style={{ margin: "0.75rem" }}
-                      >
-                        {formatMessage({ id: "goBack" })}{" "}
-                      </Link>
+                      <div className="d-flex flex-wrap justify-content-center">
+                        <button
+                          htmltype="submit"
+                          className="main-link"
+                          style={{ margin: "0.75rem" }}
+                        >
+                          {formatMessage({ id: "saveChanges" })}{" "}
+                        </button>
+                        <Link
+                          to={`/customers-list`}
+                          className="main-link"
+                          style={{ margin: "0.75rem" }}
+                        >
+                          {formatMessage({ id: "backToCustomers" })}{" "}
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -263,35 +263,8 @@ const CreateProductPage = (props) => {
   );
 };
 
-// ==== ANTD customization ====
-
 const StyledForm = styled(Form)`
-  @media only screen and (min-width: 320px) and (max-width: 991px) {
-    .ant-upload.ant-upload-select-picture-card {
-      width: 100%;
-      height: 300px;
-    }
-
-    .ant-upload-list-picture-card .ant-upload-list-item {
-      width: 280px;
-      height: 300px;
-    }
-    .ant-upload-picture-card-wrapper {
-      height: 300px;
-    }
-  }
-  @media only screen and (min-width: 991px) {
-    .ant-upload.ant-upload-select-picture-card {
-      width: 500px;
-      height: 500px;
-    }
-
-    .ant-upload-list-picture-card .ant-upload-list-item {
-      width: 500px;
-      height: 500px;
-    }
-  }
+  background: var(--mainGrey);
 `;
-// ==== ANTD customization ====
 
-export default injectIntl(CreateProductPage);
+export default injectIntl(CreateCustomerPage);

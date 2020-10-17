@@ -11,7 +11,7 @@ export default class Footer extends Component {
               <div className="container py-3">
                 <div className="row">
                   <div className="col-md-6">
-                    <p className="text-capitalize">
+                    <p className="text-capitalize text-center">
                       copyright &copy; customers management app {new Date().getFullYear()}.
                       all rights reserved
                     </p>

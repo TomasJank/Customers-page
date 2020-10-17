@@ -1,7 +1,7 @@
 import React from "react";
 
 // ==== Components ====
-import ProductList from "../components/ProductListPage/ProductList";
+import CustomerList from "../components/CustomerListPage/CustomerList";
 import Hero from "../components/Hero";
 // ==== Components ====
 
@@ -9,13 +9,13 @@ import Hero from "../components/Hero";
 import { storeBcg } from "../helpers/images-helper";
 // ==== Helpers ====
 
-const ProductListPage = () => {
+const CustomerListPage = () => {
   return (
     <div>
       <Hero img={storeBcg} />
-      <ProductList />
+      <CustomerList />
     </div>
   );
 };
 
-export default ProductListPage;
+export default CustomerListPage;

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { linkData } from "./linkData";
 import { socialData } from "./socialData";
-import { items } from "./productData";
+import { items } from "./customerData";
 import keys from "../config/keys";
 
 import Geocode from "react-geocode";
@@ -16,45 +16,41 @@ class ProductProvider extends Component {
     links: linkData,
     socialIcons: socialData,
     customers: [],
-    filteredProducts: [],
-    singleProducts: {},
+    search: "",
+    filteredCustomers: [],
+    singleCustomer: "",
     loading: false,
   };
 
   componentWillMount() {
     !localStorage.getItem("customers")
-      ? this.setProducts(items)
+      ? this.setCustomers(items)
       : this.setFeatures();
   }
 
   componentDidMount() {
-    window.addEventListener("click", this.clickHandler);
+    window.addEventListener("click", this.sideBarClickHandler);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("click", this.clickHandler);
+    window.removeEventListener("click", this.sideBarClickHandler);
   }
 
-  clickHandler = (e) => {
-    if (e.target.nodeName === "path"|| e.target.nodeName === "svg") return;
-    this.closeSidebar()
+  sideBarClickHandler = (e) => {
+    if (e.target.parentNode && e.target.parentNode.classList.contains("burger"))
+      return;
+    this.closeSidebar();
   };
 
   setFeatures() {
     const customers = JSON.parse(localStorage.getItem("customers"));
-    const maxPrice = Math.max(...customers.map((item) => item.price));
-    const featuredProducts = customers.filter((item) => item.featured === true);
     this.setState({
       customers,
-      filteredProducts: customers,
-      featuredProducts,
-      singleProduct: this.getStorageProduct(),
-      max: maxPrice,
-      price: maxPrice,
+      filteredCustomers: customers,
     });
   }
 
-  setProducts = (products) => {
+  setCustomers = (products) => {
     let customers = products.map((item) => {
       const id = item.id;
       const name = item.name;
@@ -71,8 +67,8 @@ class ProductProvider extends Component {
 
     this.setState({
       customers,
-      filteredProducts: customers,
-      singleProduct: this.getStorageProduct(),
+      filteredCustomers: customers,
+      singleCustomer: this.getStorageCustomer(),
     });
   };
 
@@ -92,29 +88,19 @@ class ProductProvider extends Component {
 
     const newcustomers = [...customers, newProduct];
 
-    let featuredProducts = newcustomers.filter(
-      (item) => item.featured === true
-    );
-    //get max price
-    let maxPrice = Math.max(...newcustomers.map((item) => item.price));
-
     this.setState(
       {
         customers: newcustomers,
-        filteredProducts: newcustomers,
-        featuredProducts,
-        singleProduct: this.getStorageProduct(),
-        max: maxPrice,
-        price: maxPrice,
+        filteredCustomers: newcustomers,
+        singleCustomer: this.getStorageCustomer(),
       },
-      () => this.syncProductsStorage()
+      () => this.syncCustomersStorage()
     );
   };
 
-  // get product from local storage
-  getStorageProduct = () => {
-    return localStorage.getItem("singleProduct")
-      ? JSON.parse(localStorage.getItem("singleProduct"))
+  getStorageCustomer = () => {
+    return localStorage.getItem("singleCustomer")
+      ? JSON.parse(localStorage.getItem("singleCustomer"))
       : {};
   };
 
@@ -132,34 +118,27 @@ class ProductProvider extends Component {
       return item;
     });
 
-    let featuredProducts = newcustomers.filter(
-      (item) => item.featured === true
-    );
-    //get max price
-    let maxPrice = Math.max(...newcustomers.map((item) => item.price));
+
 
     this.setState(
       {
         customers: newcustomers,
-        filteredProducts: newcustomers,
-        featuredProducts,
-        max: maxPrice,
-        price: maxPrice,
+        filteredCustomers: newcustomers,
+
       },
-      () => this.syncProductsStorage()
+      () => this.syncCustomersStorage()
     );
   };
 
-  syncProductsStorage = () => {
+  syncCustomersStorage = () => {
     localStorage.setItem("customers", JSON.stringify(this.state.customers));
   };
 
-  //set single product
-  setSingleProduct = (id) => {
-    let product = this.state.customers.find((item) => item.id === id);
-    localStorage.setItem("singleProduct", JSON.stringify(product));
+  setSingleCustomer = (id) => {
+    let customer = this.state.customers.find((item) => item.id === id);
+    localStorage.setItem("singleCustomer", JSON.stringify(customer));
     this.setState({
-      singleProduct: { ...product },
+      singleCustomer: { ...customer },
     });
   };
 
@@ -176,28 +155,19 @@ class ProductProvider extends Component {
   };
 
   removeItem = (id) => {
-    let tempProducts = [...this.state.customers];
-    tempProducts = tempProducts.filter((item) => item.id !== id);
-
-    let featuredProducts = tempProducts.filter(
-      (item) => item.featured === true
-    );
-    //get max price
-    let maxPrice = Math.max(...tempProducts.map((item) => item.price));
+    let tempCustomers = [...this.state.customers];
+    tempCustomers = tempCustomers.filter((item) => item.id !== id);
 
     this.setState(
       {
-        customers: tempProducts,
-        filteredProducts: tempProducts,
-        featuredProducts,
-        max: maxPrice,
-        price: maxPrice,
+        customers: tempCustomers,
+        filteredCustomers: tempCustomers,
       },
       () => {
-        this.syncProductsStorage();
+        this.syncCustomersStorage();
       }
     );
-    return tempProducts;
+    return tempCustomers;
   };
 
   loadPage = (value) => {
@@ -220,6 +190,36 @@ class ProductProvider extends Component {
     return success;
   };
 
+  handleSearchChange = (event) => {
+    const name = event.target.name;
+
+    this.setState(
+      {
+        [name]: event.target.value,
+      },
+      this.sortData
+    );
+  };
+
+  sortData = () => {
+    const { customers, search } = this.state;
+
+    //filtereing based on search
+    if (search.length > 0) {
+      const filteredCustomers = [...customers].filter(
+        (item) => item.name.toLowerCase().indexOf(search.toLowerCase()) > -1
+      );
+
+      this.setState({
+        filteredCustomers,
+      });
+    } else {
+      this.setState({
+        filteredCustomers: customers,
+      });
+    }
+  };
+
   render() {
     return (
       <ProductContext.Provider
@@ -228,11 +228,13 @@ class ProductProvider extends Component {
           removeItem: this.removeItem,
           handleSidebar: this.handleSidebar,
           closeSidebar: this.closeSidebar,
-          setSingleProduct: this.setSingleProduct,
           addNewProduct: this.addNewProduct,
           editItem: this.editItem,
           loadPage: this.loadPage,
           validateAddress: this.validateAddress,
+          sortData: this.sortData,
+          handleSearchChange: this.handleSearchChange,
+          setSingleCustomer: this.setSingleCustomer,
         }}
       >
         {this.props.children}
