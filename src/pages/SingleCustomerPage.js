@@ -16,6 +16,7 @@ import { ProductContext } from "../context/context";
 // ==== Context API ====
 
 const SingleCustomerPage = (props) => {
+
   const isInitialMount = useRef(true);
 
   const { customers, loadPage } = useContext(ProductContext);
@@ -32,19 +33,20 @@ const SingleCustomerPage = (props) => {
 
   useEffect(() => {
     loadPage(true);
-
     if (isInitialMount.current && !customers.length) {
+
       isInitialMount.current = false;
     } else if (!isInitialMount.current || customers.length > 0) {
+
       const c = customers.filter((c) => c.id === parseInt(id))[0];
-      if (!c) return;
+      if (!c) return window.location.href = "/";;
       loadPage(false);
 
       setCustomer(c);
     }
-  }, [customers]);
+  }, [customers, id, loadPage]);
 
-  if (!customer) return null; // Butu galima uzdet kazka grazesnio ...
+  if (!customer) return null; // Could add something more entertaining than a null LOL ...
 
   const { name, email, city, street, houseNumber, zip } = customer;
 

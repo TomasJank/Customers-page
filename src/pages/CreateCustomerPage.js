@@ -32,46 +32,59 @@ const CreateCustomerPage = (props) => {
   } = props;
 
   const onAddressNotFound = () => {
-    message.warning(
-      "The address cannot be found, please type in a valid address"
-    );
+    message.warning(formatMessage({ id: "addressNotFound" }));
     form.setFields([
       {
         name: "city",
-        errors: ["City name might be invalid"],
+        errors: [
+          formatMessage({
+            id: "invalidCity",
+          }),
+        ],
       },
       {
         name: "street",
-        errors: ["Street name might be invalid"],
+        errors: [
+          formatMessage({
+            id: "invalidStreet",
+          }),
+        ],
       },
       {
         name: "houseNumber",
-        errors: ["House number might be invalid"],
+        errors: [
+          formatMessage({
+            id: "invalidHouseNumber",
+          }),
+        ],
       },
       {
         name: "zip",
-        errors: ["Zip code might be invalid"],
+        errors: [
+          formatMessage({
+            id: "invalidZip",
+          }),
+        ],
       },
     ]);
   };
-
   const emailValidator = async (_, value) => {
     const emailRegexTest = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(
       value
     );
 
     if (!value) {
-      throw new Error("fieldCannotBeEmpty");
+      throw new Error(formatMessage({ id: "fieldCannotBeEmpty" }));
     } else if (!emailRegexTest) {
-      throw new Error("Invalid email format");
+      throw new Error(formatMessage({ id: "invalidEmailFormat" }));
     }
   };
 
-  const handleSubmit = async (values, addNewProduct, validateAddress) => {
+  const handleSubmit = async (values, addNewCustomer, validateAddress) => {
     const { city, street, houseNumber, zip } = values;
 
     if (await validateAddress(`${city}, ${street}, ${houseNumber}, ${zip}`)) {
-      addNewProduct(values);
+      addNewCustomer(values);
       setRedirect(true);
     } else {
       onAddressNotFound();
@@ -87,12 +100,12 @@ const CreateCustomerPage = (props) => {
       <Hero img={customerBcg} />
       <ProductConsumer>
         {(value) => {
-          const { addNewProduct, validateAddress } = value;
+          const { addNewCustomer, validateAddress } = value;
           return (
             <StyledForm
               form={form}
               onFinish={(values) =>
-                handleSubmit(values, addNewProduct, validateAddress)
+                handleSubmit(values, addNewCustomer, validateAddress)
               }
               scrollToFirstError
             >

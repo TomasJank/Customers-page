@@ -5,7 +5,7 @@
   "home": "Pagrindinis",
   "customersList": "Klientų sąrašas",
   "controls": "Valdymas",
-  "backToCustomers": "Atgal į prekių peržiūrą",
+  "backToCustomers": "Atgal į klientų peržiūrą",
   "fullName": "Vardas, pavardė",
   "name": "Vardas",
   "email": "Pašto adresas",
@@ -23,7 +23,12 @@
   "editCustomer": "Redaguoti klientą",
   "viewCustomer": "Žiūrėti klientą",
   "fieldCannotBeEmpty": "Laukelis negali būti tuščias",
+  "invalidEmailFormat":"Neteisingas pašto adreso formatas",
   "searchByFullName": "Ieškoti pagal kliento vardą",
   "customerInformation": "Kliento informacija",
-  "registerNewCustomer": "Naujo kliento registracija"
-}
+  "registerNewCustomer": "Naujo kliento registracija",
+  "invalidCity":"Miesto pavadinimas gali būti neteisingas",
+  "invalidStreet":"Gatvės pavadinimas gali būti neteisingas",
+  "invalidHouseNumber":"Namo numeris  gali būti neteisingas",
+  "invalidZip":"Pašto kodas gali būti neteisingas",
+  "addressNotFound":"Adresas kurį įvedėte nebuvo rastas, prašome pabandyti jį patikslinti"}

@@ -28,7 +28,9 @@ const EditCustomerPage = (props) => {
 
   const isInitialMount = useRef(true);
 
-  const { customers, loadPage, editItem, validateAddress } = useContext(ProductContext);
+  const { customers, loadPage, editItem, validateAddress } = useContext(
+    ProductContext
+  );
 
   const [redirect, setRedirect] = useState(false);
 
@@ -49,34 +51,47 @@ const EditCustomerPage = (props) => {
       isInitialMount.current = false;
     } else if (!isInitialMount.current || customers.length > 0) {
       const c = customers.filter((c) => c.id === parseInt(id))[0];
-      if (!c) return;
+      if (!c) return (window.location.href = "/");
       loadPage(false);
 
       setCustomer(c);
     }
-  }, [customers]);
-
+  }, [customers, id, loadPage]);
 
   const onAddressNotFound = () => {
-    message.warning(
-      "The address cannot be found, please type in a valid address"
-    );
+    message.warning(formatMessage({ id: "addressNotFound" }));
     form.setFields([
       {
         name: "city",
-        errors: ["City name might be invalid"],
+        errors: [
+          formatMessage({
+            id: "invalidCity",
+          }),
+        ],
       },
       {
         name: "street",
-        errors: ["Street name might be invalid"],
+        errors: [
+          formatMessage({
+            id: "invalidStreet",
+          }),
+        ],
       },
       {
         name: "houseNumber",
-        errors: ["House number might be invalid"],
+        errors: [
+          formatMessage({
+            id: "invalidHouseNumber",
+          }),
+        ],
       },
       {
         name: "zip",
-        errors: ["Zip code might be invalid"],
+        errors: [
+          formatMessage({
+            id: "invalidZip",
+          }),
+        ],
       },
     ]);
   };
@@ -87,9 +102,9 @@ const EditCustomerPage = (props) => {
     );
 
     if (!value) {
-      throw new Error("fieldCannotBeEmpty");
+      throw new Error(formatMessage({ id: "fieldCannotBeEmpty" }));
     } else if (!emailRegexTest) {
-      throw new Error("Invalid email format");
+      throw new Error(formatMessage({ id: "invalidEmailFormat" }));
     }
   };
 
@@ -111,12 +126,11 @@ const EditCustomerPage = (props) => {
     }
   };
 
-  if (!customer) return null; // Butu galima uzdet kazka grazesnio ...
+  if (!customer) return null; // Could add something more entertaining than a null LOL ...
 
   if (redirect.value) {
     return <Redirect push to={{ pathname: `/customers-list` }} />;
   }
-
 
   const { name, email, city, street, houseNumber, zip } = customer;
 
@@ -145,8 +159,7 @@ const EditCustomerPage = (props) => {
               <div className="col-10 mx-auto col-sm-8 col-md-6 my-5">
                 <h5 className="mb-4 text-capitalize">
                   <div className="col text-title text-center mb-5">
-                    {" "}
-                    Edit customer
+                    {formatMessage({ id: "editCustomer" })}
                   </div>
                   <span>
                     <Form.Item

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { linkData } from "./linkData";
 
 import { customers } from "./customerData";
 
@@ -16,11 +15,7 @@ const ProductContext = React.createContext();
 class ProductProvider extends Component {
   state = {
     sidebarOpen: false,
-    links: linkData,
     customers: [],
-    search: "",
-    filteredCustomers: [],
-    singleCustomer: "",
     loading: false,
     language: navigator.language.split("-")[0],
   };
@@ -31,13 +26,6 @@ class ProductProvider extends Component {
       : this.setCustomers();
 
     window.addEventListener("click", this.sideBarClickHandler);
-  }
-
-  async componentDidUpdate() {
-    // console.log('testing', await fetchCustomers("customers"))
-
-    // console.log("localForage", localforage)
-    console.log("singleCustomer", this.state.singleCustomer);
   }
 
   componentWillUnmount() {
@@ -52,10 +40,8 @@ class ProductProvider extends Component {
 
   async setCustomers() {
     const customers = JSON.parse(JSON.parse(await fetchCustomers("customers")));
-    console.log('setCustomers', customers)
     this.setState({
       customers,
-      filteredCustomers: customers,
     });
   }
 
@@ -68,23 +54,16 @@ class ProductProvider extends Component {
       const street = customerItem.street;
       const houseNumber = customerItem.houseNumber;
       const zip = customerItem.zip;
-      console.log("id is ", id)
       const customer = { id, name, email, city, street, houseNumber, zip };
-      console.log("initial customer", customer)
       return customer;
-
     });
-    console.log("initial initial customer", customers)
-    // localStorage.setItem("customers", JSON.stringify(customers));
     addCustomers("customers", JSON.stringify(customers));
     this.setState({
       customers,
-      filteredCustomers: customers,
-      singleCustomer: this.getStorageCustomer(),
     });
   };
 
-  addNewProduct = (item) => {
+  addNewCustomer = (item) => {
     const { name, email, city, street, houseNumber, zip } = item;
     const { customers } = this.state;
 
@@ -98,27 +77,19 @@ class ProductProvider extends Component {
       zip,
     };
 
-    const newcustomers = [...customers, newProduct];
+    const newCustomers = [...customers, newProduct];
 
     this.setState(
       {
-        customers: newcustomers,
-        filteredCustomers: newcustomers,
-        singleCustomer: this.getStorageCustomer(),
+        customers: newCustomers,
       },
       () => this.syncCustomersStorage()
     );
   };
 
-  getStorageCustomer = async () => {
-    return (await fetchCustomers("singleCustomer"))
-      ? JSON.parse(JSON.parse(fetchCustomers("singleCustomer")))
-      : {};
-  };
-
   editItem = (editedItem, id) => {
     const { name, email, city, street, houseNumber, zip } = editedItem;
-    const newcustomers = this.state.customers.map((item) => {
+    const newCustomers = this.state.customers.map((item) => {
       if (item.id === id) {
         item.name = name;
         item.email = email;
@@ -132,8 +103,7 @@ class ProductProvider extends Component {
 
     this.setState(
       {
-        customers: newcustomers,
-        filteredCustomers: newcustomers,
+        customers: newCustomers,
       },
       () => this.syncCustomersStorage()
     );
@@ -141,14 +111,6 @@ class ProductProvider extends Component {
 
   syncCustomersStorage = async () => {
     await addCustomers("customers", JSON.stringify(this.state.customers));
-  };
-
-  setSingleCustomer = async (id) => {
-    let customer = this.state.customers.find((item) => item.id === id);
-    await addCustomers("singleCustomer", JSON.stringify(customer));
-    this.setState({
-      singleCustomer: { ...customer },
-    });
   };
 
   handleSidebar = () => {
@@ -166,11 +128,9 @@ class ProductProvider extends Component {
   removeItem = (id) => {
     let tempCustomers = [...this.state.customers];
     tempCustomers = tempCustomers.filter((item) => item.id !== id);
-
     this.setState(
       {
         customers: tempCustomers,
-        filteredCustomers: tempCustomers,
       },
       () => {
         this.syncCustomersStorage();
@@ -199,39 +159,9 @@ class ProductProvider extends Component {
     return success;
   };
 
-  handleSearchChange = (event) => {
-    const name = event.target.name;
-
-    this.setState(
-      {
-        [name]: event.target.value,
-      },
-      this.sortData
-    );
-  };
-
-  sortData = () => {
-    const { customers, search } = this.state;
-
-    //filtereing based on search
-    if (search.length > 0) {
-      const filteredCustomers = [...customers].filter(
-        (item) => item.name.toLowerCase().indexOf(search.toLowerCase()) > -1
-      );
-
-      this.setState({
-        filteredCustomers,
-      });
-    } else {
-      this.setState({
-        filteredCustomers: customers,
-      });
-    }
-  };
-
   setLanguage = () => {
     const { language } = this.state;
-    this.setState({ language: language == "en" ? "lt" : "en" });
+    this.setState({ language: language === "en" ? "lt" : "en" });
   };
 
   render() {
@@ -242,13 +172,10 @@ class ProductProvider extends Component {
           removeItem: this.removeItem,
           handleSidebar: this.handleSidebar,
           closeSidebar: this.closeSidebar,
-          addNewProduct: this.addNewProduct,
+          addNewCustomer: this.addNewCustomer,
           editItem: this.editItem,
           loadPage: this.loadPage,
           validateAddress: this.validateAddress,
-          sortData: this.sortData,
-          handleSearchChange: this.handleSearchChange,
-          setSingleCustomer: this.setSingleCustomer,
           setLanguage: this.setLanguage,
         }}
       >
@@ -260,4 +187,4 @@ class ProductProvider extends Component {
 
 const ProductConsumer = ProductContext.Consumer;
 
-export {ProductContext, ProductProvider, ProductConsumer };
+export { ProductContext, ProductProvider, ProductConsumer };

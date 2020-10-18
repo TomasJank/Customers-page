@@ -1,5 +1,4 @@
-if (process.env.NODE_ENV === "production") {
-  module.exports = require("./prod");
-} else {
-  module.exports = require("./dev");
-}
+import dev from './dev'
+import prod from './prod'
+
+export default process.env.NODE_ENV === "production" ? prod : dev

@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React from "react";
 import { injectIntl } from "react-intl";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
@@ -13,13 +13,12 @@ import HamburgetIcon from "./HamburgerIcon";
 // ==== Components ====
 
 // ==== Context API ====
-import { ProductConsumer, ProductContext } from "../context/";
+import { ProductConsumer } from "../context/";
 // ==== Context API ====
 const Navbar = (props) => {
   const {
     intl: { formatMessage },
   } = props;
-console.log('useContext', useContext(ProductContext))
   return (
     <ProductConsumer>
       {(value) => {

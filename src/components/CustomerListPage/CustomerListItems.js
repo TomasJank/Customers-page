@@ -1,15 +1,12 @@
 import React from "react";
 import { injectIntl } from "react-intl";
 import styled from "styled-components";
+
 // ==== Components ====
 import CustomerListItem from "./CustomerListItem";
 // ==== Components ====
 
-// ==== Context API ====
-import { ProductConsumer } from "../../context/context";
-// ==== Context API ====
-
-const CustomerListItems = (props) => {
+const CustomerListItems = ({ filteredCustomers, removeItem, ...props }) => {
   const {
     intl: { formatMessage },
   } = props;
@@ -18,42 +15,21 @@ const CustomerListItems = (props) => {
       <div className="container-fluid">
         <div className="row">
           <div className="col">
-            <ProductConsumer>
-              {(value) => {
-                const {
-                  increment,
-                  decrement,
-                  removeItem,
-                  filteredCustomers,
-                  setSingleCustomer,
-                  setActive,
-                  setEditPrice,
-                } = value;
-                console.log("filteredCustomers", filteredCustomers)
-                return (
-                  <div className="my-2">
-                    {filteredCustomers.length > 0 ? (
-                      filteredCustomers.map((item, index) => (
-                        <CustomerListItem
-                          key={index}
-                          customer={item}
-                          increment={increment}
-                          decrement={decrement}
-                          removeItem={removeItem}
-                          setSingleCustomer={setSingleCustomer}
-                          setActive={setActive}
-                          setEditPrice={setEditPrice}
-                        ></CustomerListItem>
-                      ))
-                    ) : (
-                      <div className="col text-title text-center m-3">
-                        {formatMessage({ id: "noMatch" })}{" "}
-                      </div>
-                    )}
-                  </div>
-                );
-              }}
-            </ProductConsumer>
+            <div className="my-2">
+              {filteredCustomers.length > 0 ? (
+                filteredCustomers.map((item, index) => (
+                  <CustomerListItem
+                    key={index}
+                    customer={item}
+                    removeItem={removeItem}
+                  ></CustomerListItem>
+                ))
+              ) : (
+                <div className="col text-title text-center m-3">
+                  {formatMessage({ id: "noMatch" })}{" "}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

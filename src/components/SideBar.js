@@ -2,6 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { injectIntl } from "react-intl";
+
+import { linkData } from "../context/linkData";
+
 // ==== Context API ====
 import { ProductConsumer } from "../context";
 import SideBarIcons from "./CustomersPage/SideBarIcons";
@@ -10,7 +13,7 @@ const SideBar = (props) => {
   return (
     <ProductConsumer>
       {(value) => {
-        const { links, sidebarOpen, handleSidebar } = value;
+        const { sidebarOpen, handleSidebar } = value;
         const {
           intl: { formatMessage },
         } = props;
@@ -18,7 +21,7 @@ const SideBar = (props) => {
         return (
           <SideWrapper className="sidebar" show={sidebarOpen}>
             <ul>
-              {links.map((link) => {
+              {linkData.map((link) => {
                 return (
                   <li key={link.id}>
                     <Link

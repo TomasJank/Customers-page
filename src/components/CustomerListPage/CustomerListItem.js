@@ -7,21 +7,22 @@ import { FaTrash, FaEye, FaEdit } from "react-icons/fa";
 
 const CustomerListItem = ({
   customer,
-  increment,
-  decrement,
+
   removeItem,
   setSingleCustomer,
   key,
   ...props
 }) => {
   const { id, name, email, city, street, houseNumber, zip } = customer;
-console.log("customer 123123", customer)
   const {
     intl: { formatMessage },
   } = props;
 
   return (
-    <div className="row text-capitalize text-center align-items-center mt-1 mb-4 mb-md-2 mb-sm-4" key={key}>
+    <div
+      className="row text-capitalize text-center align-items-center mt-1 mb-4 mb-md-2 mb-sm-4"
+      key={key}
+    >
       <div className="col-lg-10">
         <div className="row">
           <div className="col-12 col-lg-2">
@@ -29,7 +30,7 @@ console.log("customer 123123", customer)
               <span className="d-lg-none">
                 {formatMessage({ id: "fullName" })} :{" "}
               </span>
-              <span onClick={() => setSingleCustomer(id)}> {name}</span>
+              <span> {name}</span>
             </Link>
           </div>
 
@@ -73,7 +74,7 @@ console.log("customer 123123", customer)
             <Link to={`/customer/${id}`}>
               <FaEye
                 className="mr-2"
-                onClick={() => setSingleCustomer(id)}
+                // onClick={() => setSingleCustomer(id)}
                 size={20}
                 title={formatMessage({ id: "viewCustomer" })}
               />
@@ -82,7 +83,7 @@ console.log("customer 123123", customer)
             <Link to={`/customer/${id}/edit`}>
               <FaEdit
                 className="mr-2"
-                onClick={() => setSingleCustomer(id)}
+                // onClick={() => setSingleCustomer(id)}
                 size={20}
                 title={formatMessage({ id: "editCustomer" })}
               />

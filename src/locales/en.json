@@ -23,8 +23,17 @@
   "editCustomer": "Edit Customer",
   "viewCustomer": "View Customer",
   "fieldCannotBeEmpty": "Field cannot be empty",
+  "invalidEmailFormat":"Invalid email format",
   "searchByFullName":"Search by customer's full name",
   "customerInformation":"Customer Information",
-  "registerNewCustomer":"Register a new customer"
+  "registerNewCustomer":"Register a new customer",
+  "invalidCity":"City name might be invalid",
+  "invalidStreet":"Street name might be invalid",
+  "invalidHouseNumber":"House number might be invalid",
+  "invalidZip":"Zip code might be invalid",
+  "addressNotFound":"The address cannot be found, please type in a valid address"
+
+  
+
 }
   
