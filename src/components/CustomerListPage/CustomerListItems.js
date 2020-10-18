@@ -10,6 +10,7 @@ const CustomerListItems = ({ filteredCustomers, removeItem, ...props }) => {
   const {
     intl: { formatMessage },
   } = props;
+  console.log("filteredCustomers", filteredCustomers)
   return (
     <ProductListWrapper className="styled-scrollbar">
       <div className="container-fluid">

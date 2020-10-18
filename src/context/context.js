@@ -47,7 +47,7 @@ class ProductProvider extends Component {
 
   setInitialCustomers = async (customersData) => {
     let customers = customersData.map((customerItem) => {
-      const id = getNextAppId();
+      const id = getNextAppId(customersData);
       const name = customerItem.name;
       const email = customerItem.email;
       const city = customerItem.city;
@@ -68,7 +68,7 @@ class ProductProvider extends Component {
     const { customers } = this.state;
 
     const newProduct = {
-      id: getNextAppId(),
+      id: getNextAppId(customers),
       name,
       email,
       city,

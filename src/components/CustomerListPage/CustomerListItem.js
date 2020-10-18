@@ -25,7 +25,7 @@ const CustomerListItem = ({
     >
       <div className="col-lg-10">
         <div className="row">
-          <div className="col-12 col-lg-2">
+          <div className="col-12 col-lg-2 text-break">
             <Link to={`/customer/${id}`}>
               <span className="d-lg-none">
                 {formatMessage({ id: "fullName" })} :{" "}
@@ -34,35 +34,35 @@ const CustomerListItem = ({
             </Link>
           </div>
 
-          <div className="col-12 col-lg-2">
+          <div className="col-12 col-lg-2 text-break">
             <span className="d-lg-none">
               {formatMessage({ id: "email" })} :{" "}
             </span>
             {email}
           </div>
 
-          <div className="col-12 col-lg-2">
+          <div className="col-12 col-lg-2 text-break">
             <span className="d-lg-none">
               {formatMessage({ id: "city" })} :{" "}
             </span>
             {city}
           </div>
 
-          <div className="col-12 col-lg-2">
+          <div className="col-12 col-lg-2 text-break">
             <span className="d-lg-none">
               {formatMessage({ id: "street" })} :{" "}
             </span>
             {street}
           </div>
 
-          <div className="col-12 col-lg-2">
+          <div className="col-12 col-lg-2 text-break">
             <span className="d-lg-none">
               {formatMessage({ id: "houseNumber" })} :{" "}
             </span>
             {houseNumber}
           </div>
 
-          <div className="col-12 col-lg-2">
+          <div className="col-12 col-lg-2 text-break">
             <span className="d-lg-none">{formatMessage({ id: "zip" })} : </span>
             {zip}
           </div>
