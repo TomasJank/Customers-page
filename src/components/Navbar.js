@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { injectIntl } from "react-intl";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
@@ -9,23 +9,17 @@ import { FaUsers } from "react-icons/fa";
 
 // ==== Components ====
 import LangTag from "./LangTag";
-import HamburgetIcon from "./HamburgerIcon"
+import HamburgetIcon from "./HamburgerIcon";
 // ==== Components ====
 
 // ==== Context API ====
-import { ProductConsumer } from "../context/";
+import { ProductConsumer, ProductContext } from "../context/";
 // ==== Context API ====
-
-// ==== Redux ====
-import { connect } from "react-redux";
-import { changeLang } from "../redux/actions";
-// ==== Redux ====
-
 const Navbar = (props) => {
   const {
     intl: { formatMessage },
   } = props;
-
+console.log('useContext', useContext(ProductContext))
   return (
     <ProductConsumer>
       {(value) => {
@@ -33,7 +27,7 @@ const Navbar = (props) => {
         return (
           <NavWrapper>
             <div className="nav-center">
-              <HamburgetIcon open={sidebarOpen} onClick={handleSidebar}/>
+              <HamburgetIcon open={sidebarOpen} onClick={handleSidebar} />
               {/* <FaBars className="nav-icon" onClick={handleSidebar} /> */}
               <Link to="/" style={{ textDecoration: "none" }}>
                 <FaUsers className="logo" size={30} />
@@ -96,4 +90,4 @@ const NavWrapper = styled.nav`
   }
 `;
 
-export default connect(null, { changeLang })(injectIntl(Navbar));
+export default (injectIntl(Navbar));

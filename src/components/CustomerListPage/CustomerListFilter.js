@@ -11,9 +11,9 @@ import { ProductConsumer } from "../../context/context";
 // ==== Context API ====
 
 const CustomerListFilter = (props) => {
-  // const {
-  //   intl: { formatMessage },
-  // } = props;
+  const {
+    intl: { formatMessage },
+  } = props;
   return (
     <ProductConsumer>
       {(value) => {
@@ -29,7 +29,7 @@ const CustomerListFilter = (props) => {
                 type="text"
                 name="search"
                 onChange={handleSearchChange}
-                placeholder="Search by customer's full name"
+                placeholder={formatMessage({id: "searchByFullName"})}
                 autoComplete="off"
               />
           </div>

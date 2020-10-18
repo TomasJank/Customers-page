@@ -5,7 +5,7 @@ import Title from "../Title";
 // ==== Components ====
 
 // ==== Services =====
-import { aboutBcg } from "../../helpers/images-helper";
+import { aboutBcg } from "../../assets/image-assets";
 // ==== Services =====
 
 const Info = (props) => {

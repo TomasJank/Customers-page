@@ -6,7 +6,7 @@ import Hero from "../components/Hero";
 // ==== Components ====
 
 // ==== Helpers ====
-import { defaultBcg } from "../helpers/images-helper";
+import { defaultBcg } from "../assets/image-assets";
 // ==== Helpers ====
 
 const Default = () => {

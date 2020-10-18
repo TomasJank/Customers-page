@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 // ==== Helpers ====
-import { mainBcg } from "../helpers/images-helper";
+import { mainBcg } from "../assets/image-assets";
 // ==== Helpers ====
 
 const Hero = ({ img, title, max, children, color }) => {

@@ -1,34 +1,30 @@
 import React, { Component } from "react";
 import styled from "styled-components";
-import { ProductConsumer } from "../context";
+
+import { socialData } from "../context/socialData";
+
 export default class Footer extends Component {
   render() {
     return (
-      <ProductConsumer>
-        {value => {
-          return (
-            <FooterWrapper>
-              <div className="container py-3">
-                <div className="row">
-                  <div className="col-md-6">
-                    <p className="text-capitalize text-center">
-                      copyright &copy; customers management app {new Date().getFullYear()}.
-                      all rights reserved
-                    </p>
-                  </div>
-                  <div className=" col-md-6 d-flex justify-content-around">
-                    {value.socialIcons.map(item => (
-                      <a href={item.path} key={item.id}>
-                        {item.icon}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </FooterWrapper>
-          );
-        }}
-      </ProductConsumer>
+      <FooterWrapper>
+        <div className="container py-3">
+          <div className="row">
+            <div className="col-md-6">
+              <p className="text-capitalize text-center">
+                copyright &copy; customers management app{" "}
+                {new Date().getFullYear()}. all rights reserved
+              </p>
+            </div>
+            <div className=" col-md-6 d-flex justify-content-around">
+              {socialData.map((item) => (
+                <a href={item.path} key={item.id}>
+                  {item.icon}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </FooterWrapper>
     );
   }
 }

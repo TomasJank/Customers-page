@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
+import { useRouter } from "../hooks/useRouter";
 import { injectIntl } from "react-intl";
 import { Link, Redirect } from "react-router-dom";
 import styled from "styled-components";
@@ -15,21 +16,46 @@ import Hero from "../components/Hero";
 // ==== Components ====
 
 // ==== Helpers ====
-import { customerBcg } from "../helpers/images-helper";
+import { customerBcg } from "../assets/image-assets";
 // ==== Helpers ====
 
 // ==== Context API ====
-import { ProductConsumer } from "../context/context";
+import { ProductContext } from "../context/context";
 // ==== Context API ====
 
 const EditCustomerPage = (props) => {
   const [form] = Form.useForm();
 
+  const isInitialMount = useRef(true);
+
+  const { customers, loadPage, editItem, validateAddress } = useContext(ProductContext);
+
   const [redirect, setRedirect] = useState(false);
+
+  const [customer, setCustomer] = useState(null);
 
   const {
     intl: { formatMessage },
   } = props;
+
+  const {
+    query: { id },
+  } = useRouter();
+
+  useEffect(() => {
+    loadPage(true);
+
+    if (isInitialMount.current && !customers.length) {
+      isInitialMount.current = false;
+    } else if (!isInitialMount.current || customers.length > 0) {
+      const c = customers.filter((c) => c.id === parseInt(id))[0];
+      if (!c) return;
+      loadPage(false);
+
+      setCustomer(c);
+    }
+  }, [customers]);
+
 
   const onAddressNotFound = () => {
     message.warning(
@@ -85,220 +111,192 @@ const EditCustomerPage = (props) => {
     }
   };
 
+  if (!customer) return null; // Butu galima uzdet kazka grazesnio ...
+
   if (redirect.value) {
     return <Redirect push to={{ pathname: `/customers-list` }} />;
   }
 
+
+  const { name, email, city, street, houseNumber, zip } = customer;
+
   return (
     <EditCustomerWrapper>
       <Hero img={customerBcg} />
-      <ProductConsumer>
-        {(value) => {
-          const {
-            singleCustomer,
-            editItem,
-            customers,
-            validateAddress,
-          } = value;
 
-          const id = parseInt(props.location.pathname.split("/")[2]);
-          let selectedCustomer = singleCustomer
-            ? singleCustomer
-            : customers.filter((customer) => customer.id === id)[0];
-
-          if (!selectedCustomer) window.location.href = "/";
-
-          const {
-            name,
-            email,
-            city,
-            street,
-            houseNumber,
-            zip,
-          } = selectedCustomer;
-
-          return (
-            <Form
-              form={form}
-              onFinish={(values) =>
-                handleSubmit(
-                  values,
-                  editItem,
-                  selectedCustomer,
-                  validateAddress
-                )
-              }
-              scrollToFirstError
-              initialValues={{
-                name,
-                email,
-                city,
-                street,
-                houseNumber,
-                zip,
-              }}
-            >
-              <section >
-              <div className="container">
-                  <div className="d-flex justify-content-center">
-                    <div className="col-10 mx-auto col-sm-8 col-md-6 my-5">
-                      <h5 className="mb-4 text-capitalize">
-                        <div className="col text-title text-center mb-5">
-                          {" "}
-                          Edit customer
-                        </div>
-                        <span>
-                          <Form.Item
-                            name="name"
-                            rules={[
-                              {
-                                required: true,
-                                message: formatMessage({
-                                  id: "fieldCannotBeEmpty",
-                                }),
-                              },
-                            ]}
-                          >
-                            <Input
-                              prefix={<AiOutlineUser className="mr-2" />}
-                              maxLength={40}
-                              placeholder="Full Name"
-                            />
-                          </Form.Item>
-                        </span>
-                      </h5>
-
-                      <h5 className="text-capitalize mb-4">
-                        <span>
-                          <Form.Item
-                            name="email"
-                            rules={[
-                              {
-                                required: true,
-                                validator: emailValidator,
-                              },
-                            ]}
-                          >
-                            <Input
-                              prefix={<AiFillMail className="mr-2" />}
-                              maxLength={40}
-                              placeholder="Email address"
-                            />
-                          </Form.Item>
-                        </span>
-                      </h5>
-
-                      <h5 className="text-capitalize mb-4">
-                        <span>
-                          <Form.Item
-                            name="city"
-                            rules={[
-                              {
-                                required: true,
-                                message: formatMessage({
-                                  id: "fieldCannotBeEmpty",
-                                }),
-                              },
-                            ]}
-                          >
-                            <Input
-                              prefix={<FaCity className="mr-2" />}
-                              maxLength={40}
-                              placeholder="City"
-                            />
-                          </Form.Item>
-                        </span>
-                      </h5>
-
-                      <h5 className="text-capitalize mb-4">
-                        <span>
-                          <Form.Item
-                            name="street"
-                            rules={[
-                              {
-                                required: true,
-                                message: formatMessage({
-                                  id: "fieldCannotBeEmpty",
-                                }),
-                              },
-                            ]}
-                          >
-                            <Input
-                              prefix={<FaStreetView className="mr-2" />}
-                              maxLength={40}
-                              placeholder="Street"
-                            />
-                          </Form.Item>
-                        </span>
-                      </h5>
-
-                      <h5 className="text-capitalize mb-4">
-                        <span>
-                          <Form.Item
-                            name="houseNumber"
-                            rules={[
-                              {
-                                required: true,
-                                message: formatMessage({
-                                  id: "fieldCannotBeEmpty",
-                                }),
-                              },
-                            ]}
-                          >
-                            <Input
-                              prefix={<BsFillHouseDoorFill className="mr-2" />}
-                              maxLength={40}
-                              placeholder="House Number"
-                            />
-                          </Form.Item>
-                        </span>
-                      </h5>
-
-                      <h5 className="text-capitalize mb-4">
-                        <span>
-                          <Form.Item
-                            name="zip"
-                            rules={[
-                              {
-                                required: true,
-                                message: formatMessage({
-                                  id: "fieldCannotBeEmpty",
-                                }),
-                              },
-                            ]}
-                          >
-                            <Input
-                              prefix={<FaMapMarkerAlt className="mr-2" />}
-                              maxLength={40}
-                              placeholder="Zip code"
-                            />
-                          </Form.Item>
-                        </span>
-                      </h5>
-                      <div className="d-flex flex-wrap justify-content-center">
-                        <button
-                          htmltype="submit"
-                          className="main-link"
-                          style={{ margin: "0.75rem" }}
-                        >
-                          {formatMessage({ id: "saveChanges" })}{" "}
-                        </button>
-                        <Link
-                          to={`/customers-list`}
-                          className="main-link"
-                          style={{ margin: "0.75rem" }}
-                        >
-                          {formatMessage({ id: "backToCustomers" })}{" "}
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </Form>
-          );
+      <Form
+        form={form}
+        onFinish={(values) =>
+          handleSubmit(values, editItem, customer, validateAddress)
+        }
+        scrollToFirstError
+        initialValues={{
+          name,
+          email,
+          city,
+          street,
+          houseNumber,
+          zip,
         }}
-      </ProductConsumer>
+      >
+        <section>
+          <div className="container">
+            <div className="d-flex justify-content-center">
+              <div className="col-10 mx-auto col-sm-8 col-md-6 my-5">
+                <h5 className="mb-4 text-capitalize">
+                  <div className="col text-title text-center mb-5">
+                    {" "}
+                    Edit customer
+                  </div>
+                  <span>
+                    <Form.Item
+                      name="name"
+                      rules={[
+                        {
+                          required: true,
+                          message: formatMessage({
+                            id: "fieldCannotBeEmpty",
+                          }),
+                        },
+                      ]}
+                    >
+                      <Input
+                        prefix={<AiOutlineUser className="mr-2" />}
+                        maxLength={40}
+                        placeholder="Full Name"
+                      />
+                    </Form.Item>
+                  </span>
+                </h5>
+
+                <h5 className="text-capitalize mb-4">
+                  <span>
+                    <Form.Item
+                      name="email"
+                      rules={[
+                        {
+                          required: true,
+                          validator: emailValidator,
+                        },
+                      ]}
+                    >
+                      <Input
+                        prefix={<AiFillMail className="mr-2" />}
+                        maxLength={40}
+                        placeholder="Email address"
+                      />
+                    </Form.Item>
+                  </span>
+                </h5>
+
+                <h5 className="text-capitalize mb-4">
+                  <span>
+                    <Form.Item
+                      name="city"
+                      rules={[
+                        {
+                          required: true,
+                          message: formatMessage({
+                            id: "fieldCannotBeEmpty",
+                          }),
+                        },
+                      ]}
+                    >
+                      <Input
+                        prefix={<FaCity className="mr-2" />}
+                        maxLength={40}
+                        placeholder="City"
+                      />
+                    </Form.Item>
+                  </span>
+                </h5>
+
+                <h5 className="text-capitalize mb-4">
+                  <span>
+                    <Form.Item
+                      name="street"
+                      rules={[
+                        {
+                          required: true,
+                          message: formatMessage({
+                            id: "fieldCannotBeEmpty",
+                          }),
+                        },
+                      ]}
+                    >
+                      <Input
+                        prefix={<FaStreetView className="mr-2" />}
+                        maxLength={40}
+                        placeholder="Street"
+                      />
+                    </Form.Item>
+                  </span>
+                </h5>
+
+                <h5 className="text-capitalize mb-4">
+                  <span>
+                    <Form.Item
+                      name="houseNumber"
+                      rules={[
+                        {
+                          required: true,
+                          message: formatMessage({
+                            id: "fieldCannotBeEmpty",
+                          }),
+                        },
+                      ]}
+                    >
+                      <Input
+                        prefix={<BsFillHouseDoorFill className="mr-2" />}
+                        maxLength={40}
+                        placeholder="House Number"
+                      />
+                    </Form.Item>
+                  </span>
+                </h5>
+
+                <h5 className="text-capitalize mb-4">
+                  <span>
+                    <Form.Item
+                      name="zip"
+                      rules={[
+                        {
+                          required: true,
+                          message: formatMessage({
+                            id: "fieldCannotBeEmpty",
+                          }),
+                        },
+                      ]}
+                    >
+                      <Input
+                        prefix={<FaMapMarkerAlt className="mr-2" />}
+                        maxLength={40}
+                        placeholder="Zip code"
+                      />
+                    </Form.Item>
+                  </span>
+                </h5>
+                <div className="d-flex flex-wrap justify-content-center">
+                  <button
+                    htmltype="submit"
+                    className="main-link"
+                    style={{ margin: "0.75rem" }}
+                  >
+                    {formatMessage({ id: "saveChanges" })}{" "}
+                  </button>
+                  <Link
+                    to={`/customers-list`}
+                    className="main-link"
+                    style={{ margin: "0.75rem" }}
+                  >
+                    {formatMessage({ id: "backToCustomers" })}{" "}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </Form>
     </EditCustomerWrapper>
   );
 };

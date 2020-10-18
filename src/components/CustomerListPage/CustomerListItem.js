@@ -11,16 +11,17 @@ const CustomerListItem = ({
   decrement,
   removeItem,
   setSingleCustomer,
+  key,
   ...props
 }) => {
   const { id, name, email, city, street, houseNumber, zip } = customer;
-
+console.log("customer 123123", customer)
   const {
     intl: { formatMessage },
   } = props;
 
   return (
-    <div className="row text-capitalize text-center align-items-center mt-1 mb-4 mb-md-2 mb-sm-4">
+    <div className="row text-capitalize text-center align-items-center mt-1 mb-4 mb-md-2 mb-sm-4" key={key}>
       <div className="col-lg-10">
         <div className="row">
           <div className="col-12 col-lg-2">
@@ -74,7 +75,7 @@ const CustomerListItem = ({
                 className="mr-2"
                 onClick={() => setSingleCustomer(id)}
                 size={20}
-                title={formatMessage({ id: "viewProduct" })}
+                title={formatMessage({ id: "viewCustomer" })}
               />
             </Link>
 
@@ -83,7 +84,7 @@ const CustomerListItem = ({
                 className="mr-2"
                 onClick={() => setSingleCustomer(id)}
                 size={20}
-                title={formatMessage({ id: "editProduct" })}
+                title={formatMessage({ id: "editCustomer" })}
               />
             </Link>
             <FaTrash
@@ -91,7 +92,7 @@ const CustomerListItem = ({
               style={{ cursor: "pointer" }}
               onClick={() => removeItem(id)}
               size={20}
-              title={formatMessage({ id: "deleteProduct" })}
+              title={formatMessage({ id: "deleteCustomer" })}
             />
           </div>{" "}
         </div>

@@ -1,6 +1,5 @@
-export const items = [
+export const customers = [
   {
-    id: 1,
     name: "Tomas J",
     email: "tomas123@gmail.com",
     city: "Kaunas",

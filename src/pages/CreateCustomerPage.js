@@ -15,7 +15,7 @@ import Hero from "../components/Hero";
 // ==== Components ====
 
 // ==== Helpers ====
-import { customerBcg } from "../helpers/images-helper";
+import { customerBcg } from "../assets/image-assets";
 // ==== Helpers ====
 
 // ==== Context API ====
@@ -102,8 +102,9 @@ const CreateCustomerPage = (props) => {
                     <div className="col-10 mx-auto col-sm-8 col-md-6 my-5">
                       <h5 className="mb-4 text-capitalize">
                         <div className="col text-title text-center mb-5">
-                          {" "}
-                          Register a new customer
+                          {formatMessage({
+                            id: "registerNewCustomer",
+                          })}
                         </div>
                         <span>
                           <Form.Item

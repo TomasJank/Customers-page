@@ -6,7 +6,7 @@ import Hero from "../components/Hero";
 // ==== Components ====
 
 // ==== Helpers ====
-import { storeBcg } from "../helpers/images-helper";
+import { storeBcg } from "../assets/image-assets";
 // ==== Helpers ====
 
 const CustomerListPage = () => {

@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { linkData } from "./linkData";
-import { socialData } from "./socialData";
-import { items } from "./customerData";
+
+import { customers } from "./customerData";
+
+import { getNextAppId } from "../utils/myUtils";
+import { addCustomers, fetchCustomers } from "../api/Customers";
 import keys from "../config/keys";
 
 import Geocode from "react-geocode";
@@ -14,22 +17,27 @@ class ProductProvider extends Component {
   state = {
     sidebarOpen: false,
     links: linkData,
-    socialIcons: socialData,
     customers: [],
     search: "",
     filteredCustomers: [],
     singleCustomer: "",
     loading: false,
+    language: navigator.language.split("-")[0],
   };
 
-  componentWillMount() {
-    !localStorage.getItem("customers")
-      ? this.setCustomers(items)
-      : this.setFeatures();
+  async componentDidMount() {
+    !(await fetchCustomers("customers"))
+      ? this.setInitialCustomers(customers)
+      : this.setCustomers();
+
+    window.addEventListener("click", this.sideBarClickHandler);
   }
 
-  componentDidMount() {
-    window.addEventListener("click", this.sideBarClickHandler);
+  async componentDidUpdate() {
+    // console.log('testing', await fetchCustomers("customers"))
+
+    // console.log("localForage", localforage)
+    console.log("singleCustomer", this.state.singleCustomer);
   }
 
   componentWillUnmount() {
@@ -42,29 +50,33 @@ class ProductProvider extends Component {
     this.closeSidebar();
   };
 
-  setFeatures() {
-    const customers = JSON.parse(localStorage.getItem("customers"));
+  async setCustomers() {
+    const customers = JSON.parse(JSON.parse(await fetchCustomers("customers")));
+    console.log('setCustomers', customers)
     this.setState({
       customers,
       filteredCustomers: customers,
     });
   }
 
-  setCustomers = (products) => {
-    let customers = products.map((item) => {
-      const id = item.id;
-      const name = item.name;
-      const email = item.email;
-      const city = item.city;
-      const street = item.street;
-      const houseNumber = item.houseNumber;
-      const zip = item.zip;
-      const products = { id, name, email, city, street, houseNumber, zip };
-      return products;
+  setInitialCustomers = async (customersData) => {
+    let customers = customersData.map((customerItem) => {
+      const id = getNextAppId();
+      const name = customerItem.name;
+      const email = customerItem.email;
+      const city = customerItem.city;
+      const street = customerItem.street;
+      const houseNumber = customerItem.houseNumber;
+      const zip = customerItem.zip;
+      console.log("id is ", id)
+      const customer = { id, name, email, city, street, houseNumber, zip };
+      console.log("initial customer", customer)
+      return customer;
+
     });
-
-    localStorage.setItem("customers", JSON.stringify(customers));
-
+    console.log("initial initial customer", customers)
+    // localStorage.setItem("customers", JSON.stringify(customers));
+    addCustomers("customers", JSON.stringify(customers));
     this.setState({
       customers,
       filteredCustomers: customers,
@@ -77,7 +89,7 @@ class ProductProvider extends Component {
     const { customers } = this.state;
 
     const newProduct = {
-      id: customers.length,
+      id: getNextAppId(),
       name,
       email,
       city,
@@ -98,9 +110,9 @@ class ProductProvider extends Component {
     );
   };
 
-  getStorageCustomer = () => {
-    return localStorage.getItem("singleCustomer")
-      ? JSON.parse(localStorage.getItem("singleCustomer"))
+  getStorageCustomer = async () => {
+    return (await fetchCustomers("singleCustomer"))
+      ? JSON.parse(JSON.parse(fetchCustomers("singleCustomer")))
       : {};
   };
 
@@ -118,25 +130,22 @@ class ProductProvider extends Component {
       return item;
     });
 
-
-
     this.setState(
       {
         customers: newcustomers,
         filteredCustomers: newcustomers,
-
       },
       () => this.syncCustomersStorage()
     );
   };
 
-  syncCustomersStorage = () => {
-    localStorage.setItem("customers", JSON.stringify(this.state.customers));
+  syncCustomersStorage = async () => {
+    await addCustomers("customers", JSON.stringify(this.state.customers));
   };
 
-  setSingleCustomer = (id) => {
+  setSingleCustomer = async (id) => {
     let customer = this.state.customers.find((item) => item.id === id);
-    localStorage.setItem("singleCustomer", JSON.stringify(customer));
+    await addCustomers("singleCustomer", JSON.stringify(customer));
     this.setState({
       singleCustomer: { ...customer },
     });
@@ -220,6 +229,11 @@ class ProductProvider extends Component {
     }
   };
 
+  setLanguage = () => {
+    const { language } = this.state;
+    this.setState({ language: language == "en" ? "lt" : "en" });
+  };
+
   render() {
     return (
       <ProductContext.Provider
@@ -235,6 +249,7 @@ class ProductProvider extends Component {
           sortData: this.sortData,
           handleSearchChange: this.handleSearchChange,
           setSingleCustomer: this.setSingleCustomer,
+          setLanguage: this.setLanguage,
         }}
       >
         {this.props.children}
@@ -245,4 +260,4 @@ class ProductProvider extends Component {
 
 const ProductConsumer = ProductContext.Consumer;
 
-export { ProductProvider, ProductConsumer };
+export {ProductContext, ProductProvider, ProductConsumer };

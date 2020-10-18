@@ -12,6 +12,7 @@ const HomePage = (props) => {
     intl: { formatMessage },
   } = props;
 
+
   return (
     <div>
       <Hero title={formatMessage({ id: "welcome" })} max="true">
@@ -20,7 +21,7 @@ const HomePage = (props) => {
           className="main-link"
           style={{ margin: "2rem" }}
         >
-          {formatMessage({ id: "your customers" })}
+          {formatMessage({ id: "yourCustomers" })}
         </Link>
 
         <Link

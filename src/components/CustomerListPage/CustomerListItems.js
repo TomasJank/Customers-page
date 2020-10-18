@@ -29,13 +29,13 @@ const CustomerListItems = (props) => {
                   setActive,
                   setEditPrice,
                 } = value;
-
+                console.log("filteredCustomers", filteredCustomers)
                 return (
                   <div className="my-2">
                     {filteredCustomers.length > 0 ? (
-                      filteredCustomers.map((item) => (
+                      filteredCustomers.map((item, index) => (
                         <CustomerListItem
-                          key={item.id}
+                          key={index}
                           customer={item}
                           increment={increment}
                           decrement={decrement}
