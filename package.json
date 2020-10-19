@@ -19,12 +19,9 @@
     "react-geocode": "^0.2.2",
     "react-icons": "^3.7.0",
     "react-intl": "^5.7.0",
-    "react-redux": "^7.2.1",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.4.3",
     "react-test-renderer": "^16.14.0",
-    "redux": "^4.0.5",
-    "redux-persist": "^6.0.0",
     "styled-components": "^4.3.2"
   },
   "scripts": {

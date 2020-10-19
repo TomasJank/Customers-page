@@ -1,11 +1,13 @@
 import React, { Component } from "react";
+import { Route, Switch } from "react-router-dom";
+import { IntlProvider } from "react-intl";
+import styled from "styled-components";
+
 import "./App.css";
 import "antd/dist/antd.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import { IntlProvider } from "react-intl";
 import { Spin } from "antd";
-import styled from "styled-components";
 
 import enMessages from "./locales/en.json";
 import ltMessages from "./locales/lt.json";
@@ -16,8 +18,6 @@ import SingleCustomer from "./pages/SingleCustomerPage";
 import EditCustomer from "./pages/EditCustomerPage";
 import CustomerListPage from "./pages/CustomerListPage";
 import Default from "./pages/Default";
-
-import { Route, Switch } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import SideBar from "./components/SideBar";
