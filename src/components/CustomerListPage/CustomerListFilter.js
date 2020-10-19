@@ -22,17 +22,15 @@ const CustomerListFilter = ({
   } = props;
 
   useEffect(() => {
-
     const sortData = () => {
       const { customers } = props;
-  
-      //filtereing based on search
+
       if (searchValue.length > 0) {
         const filteredCustomers = [...customers].filter(
           (item) =>
             item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1
         );
-  
+
         onFilteredCustomersChange(filteredCustomers);
       } else {
         onFilteredCustomersChange(customers);
@@ -40,14 +38,11 @@ const CustomerListFilter = ({
     };
 
     sortData();
-
   }, [searchValue]);
 
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
   };
-
-
 
   return (
     <ProductConsumer>
@@ -55,7 +50,6 @@ const CustomerListFilter = ({
         return (
           <div className="d-flex justify-content-center my-3 my-md-5 my-sm-3">
             <Input
-              // className="ant-input"
               prefix={<FaSearch className="mr-2" />}
               style={{ width: "300px" }}
               value={searchValue}

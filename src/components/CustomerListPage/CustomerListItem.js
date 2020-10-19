@@ -7,9 +7,7 @@ import { FaTrash, FaEye, FaEdit } from "react-icons/fa";
 
 const CustomerListItem = ({
   customer,
-
   removeItem,
-  setSingleCustomer,
   key,
   ...props
 }) => {
@@ -34,7 +32,7 @@ const CustomerListItem = ({
             </Link>
           </div>
 
-          <div className="col-12 col-lg-2 text-break">
+          <div className="col-12 col-lg-2 text-break" style={{textTransform:"none"}}>
             <span className="d-lg-none">
               {formatMessage({ id: "email" })} :{" "}
             </span>
@@ -74,7 +72,6 @@ const CustomerListItem = ({
             <Link to={`/customer/${id}`}>
               <FaEye
                 className="mr-2"
-                // onClick={() => setSingleCustomer(id)}
                 size={20}
                 title={formatMessage({ id: "viewCustomer" })}
               />
@@ -83,7 +80,6 @@ const CustomerListItem = ({
             <Link to={`/customer/${id}/edit`}>
               <FaEdit
                 className="mr-2"
-                // onClick={() => setSingleCustomer(id)}
                 size={20}
                 title={formatMessage({ id: "editCustomer" })}
               />

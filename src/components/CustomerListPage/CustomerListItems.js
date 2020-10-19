@@ -41,7 +41,7 @@ const ProductListWrapper = styled.footer`
   max-height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
-  margin: 0px 10px;
+  /* margin: 0px 10px; */
 `;
 
 export default injectIntl(CustomerListItems);

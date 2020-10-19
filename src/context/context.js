@@ -67,7 +67,7 @@ class ProductProvider extends Component {
     const { name, email, city, street, houseNumber, zip } = item;
     const { customers } = this.state;
 
-    const newProduct = {
+    const newCustomer = {
       id: getNextAppId(customers),
       name,
       email,
@@ -77,7 +77,7 @@ class ProductProvider extends Component {
       zip,
     };
 
-    const newCustomers = [...customers, newProduct];
+    const newCustomers = [...customers, newCustomer];
 
     this.setState(
       {
@@ -107,10 +107,6 @@ class ProductProvider extends Component {
       },
       () => this.syncCustomersStorage()
     );
-  };
-
-  syncCustomersStorage = async () => {
-    await addCustomers("customers", JSON.stringify(this.state.customers));
   };
 
   handleSidebar = () => {
@@ -162,6 +158,10 @@ class ProductProvider extends Component {
   setLanguage = () => {
     const { language } = this.state;
     this.setState({ language: language === "en" ? "lt" : "en" });
+  };
+
+  syncCustomersStorage = async () => {
+    await addCustomers("customers", JSON.stringify(this.state.customers));
   };
 
   render() {

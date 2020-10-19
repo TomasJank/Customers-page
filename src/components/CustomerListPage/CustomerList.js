@@ -17,6 +17,7 @@ const CustomerList = (props) => {
   const isInitialMount = useRef(true);
 
   const { customers, loadPage, removeItem } = useContext(ProductContext);
+  
   const [filteredCustomers, setFilteredCustomers] = useState([]);
 
   const {
