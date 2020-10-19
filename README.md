@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Running the project
+
 ### Downloading packages and dependencies
 
 To download packages and its dependencies run `npm install` on your command line.
