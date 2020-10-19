@@ -6,7 +6,7 @@ To download packages and its dependencies run `npm install` on your command line
 
 ### Adding Google API key
 
-In order to successfully run the Google API for customers address validation, you will need to add `REACT_APP_GOOGLE_API_KEY` with a **VALID** Google API key in your process.env global runtime var. 
+In order to successfully run the Google API for customers address validation, you will need to add `REACT_APP_GOOGLE_API_KEY` with a **VALID** Google API key in your `process.env` global runtime var. 
 
 ## Available Scripts
 
