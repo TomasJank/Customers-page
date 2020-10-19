@@ -1,25 +1,23 @@
 import React, { Component } from "react";
+import { Route, Switch } from "react-router-dom";
+import { IntlProvider } from "react-intl";
+import styled from "styled-components";
+
 import "./App.css";
 import "antd/dist/antd.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import { IntlProvider } from "react-intl";
-import { connect } from "react-redux";
 import { Spin } from "antd";
-import styled from "styled-components";
 
 import enMessages from "./locales/en.json";
 import ltMessages from "./locales/lt.json";
 
-import About from "./pages/AboutPage";
 import Home from "./pages/HomePage";
-import CreateProductPage from "./pages/CreateProductPage";
-import SingleProduct from "./pages/SingleProductPage";
-import EditProduct from "./pages/EditProductPage";
-import ProductListPage from "./pages/ProductListPage";
+import CreateCustomerPage from "./pages/CreateCustomerPage";
+import SingleCustomer from "./pages/SingleCustomerPage";
+import EditCustomer from "./pages/EditCustomerPage";
+import CustomerListPage from "./pages/CustomerListPage";
 import Default from "./pages/Default";
-
-import { Route, Switch } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import SideBar from "./components/SideBar";
@@ -36,50 +34,56 @@ const localeMessages = {
 
 class App extends Component {
   render() {
-    const { lang } = this.props;
     return (
-      <StyledApp>
-        <IntlProvider locale={lang} messages={localeMessages[lang]}>
-          <ProductConsumer>
-            {(value) => (
-              
-              <Spin
-                spinning={value.loading}
-                tip={<div style={{ fontWeight: "bold" }}>Loading...</div>}
+      <ProductConsumer>
+        {(value) => {
+          const { language } = value;
+          return (
+            <StyledApp>
+              <IntlProvider
+                locale={language}
+                messages={localeMessages[language]}
               >
-                <Navbar />
-                <SideBar />
-                <Switch>
-                  <Route exact path="/" component={Home} />
-                  <Route path="/about" component={About} />
-                  <Route
-                    exact
-                    path="/customers/new"
-                    component={CreateProductPage}
-                  />
-                  <Route exact path="/products/:id" component={SingleProduct} />
-                  <Route
-                    exact
-                    path="/products/:id/edit"
-                    component={EditProduct}
-                  />
-                  <Route path="/customers-list" component={ProductListPage} />
-                  <Route component={Default} />
-                  <Route path="/" exact component={Home} />
-                </Switch>
-                <Footer />
-              </Spin>
-            )}
-          </ProductConsumer>
-        </IntlProvider>
-      </StyledApp>
+                <Spin
+                  spinning={value.loading}
+                  tip={<div style={{ fontWeight: "bold" }}>Loading...</div>}
+                >
+                  <Navbar />
+                  <SideBar />
+                  <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route
+                      exact
+                      path="/customer/new"
+                      component={CreateCustomerPage}
+                    />
+                    <Route
+                      exact
+                      path="/customer/:id"
+                      component={SingleCustomer}
+                    />
+                    <Route
+                      exact
+                      path="/customer/:id/edit"
+                      component={EditCustomer}
+                    />
+                    <Route
+                      path="/customers-list"
+                      component={CustomerListPage}
+                    />
+                    <Route component={Default} />
+                    <Route path="/" exact component={Home} />
+                  </Switch>
+                  <Footer />
+                </Spin>
+              </IntlProvider>
+            </StyledApp>
+          );
+        }}
+      </ProductConsumer>
     );
   }
 }
-
-const mapStateToProps = (state) => {
-  return { lang: state.lang };
-};
 
 const StyledApp = styled.div`
   .ant-spin-nested-loading > div > .ant-spin {
@@ -88,4 +92,4 @@ const StyledApp = styled.div`
   }
 `;
 
-export default connect(mapStateToProps)(App);
+export default App;

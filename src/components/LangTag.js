@@ -1,32 +1,30 @@
 import React from "react";
 import styled from "styled-components";
 
-import { connect } from "react-redux";
-import { changeLang } from "../redux/actions";
-import { getLanguage } from "../redux/selectors";
+// ==== Context API ====
+import { ProductConsumer } from "../context/";
+// ==== Context API ====
 
-const LangTag = (props) => {
-  const handleLanguage = () => {
-    const { lang } = props;
-    var newLang = lang === "en" ? "lt" : "en";
-    props.changeLang(newLang);
-  };
-
-  const { lang } = props;
+const LangTag = () => {
   return (
-    <LangTagWrapper>
-      <div className="language-icon noselect" href="#" onClick={handleLanguage}>
-        {lang === "en" && <span>LT</span>}
-        {lang === "lt" && <span>EN</span>}
-      </div>
-    </LangTagWrapper>
+    <ProductConsumer>
+      {(value) => {
+        const { language, setLanguage } = value;
+        return (
+          <LangTagWrapper>
+            <div
+              className="language-icon noselect"
+              href="#"
+              onClick={setLanguage}
+            >
+              {language === "en" && <span>LT</span>}
+              {language === "lt" && <span>EN</span>}
+            </div>
+          </LangTagWrapper>
+        );
+      }}
+    </ProductConsumer>
   );
-};
-
-const mapStateToProps = (state) => {
-  const lang = getLanguage(state);
-
-  return { lang };
 };
 
 const LangTagWrapper = styled.div`
@@ -46,4 +44,4 @@ const LangTagWrapper = styled.div`
   }
 `;
 
-export default connect(mapStateToProps, { changeLang })(LangTag);
+export default (LangTag);

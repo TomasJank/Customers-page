@@ -1,34 +1,17 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { injectIntl } from "react-intl";
 
-
-
 // ==== Components ====
 import Hero from "../components/Hero";
+import Info from "../components/HomePage/Info";
 // ==== Components ====
-
-
-// Geocode.setApiKey(keys.googleMapApi);
 
 const HomePage = (props) => {
   const {
     intl: { formatMessage },
   } = props;
 
-
-  useEffect(() => {
-    // Geocode.fromAddress('Raseiniai Lithuania 60179').then(
-    //   response => {
-    //     const { lat, lng } = response.results[0].geometry.location;
-    //     console.log('apaejo', lat, lng);
-    //   },
-    //   error => {
-    //     console.log("nepaejo")
-    //     console.error(error);
-    //   },
-    // );  
-  }, [])
 
   return (
     <div>
@@ -38,17 +21,18 @@ const HomePage = (props) => {
           className="main-link"
           style={{ margin: "2rem" }}
         >
-          {formatMessage({ id: "your customers" })}
+          {formatMessage({ id: "yourCustomers" })}
         </Link>
 
         <Link
-          to="/customers/new"
+          to="/customer/new"
           className="main-link"
           style={{ margin: "2rem" }}
         >
-          {formatMessage({ id: "add new customer" })}
+          {formatMessage({ id: "addNewCustomer" })}
         </Link>
       </Hero>
+      <Info />
     </div>
   );
 };

@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 // ==== Helpers ====
-import { mainBcg } from "../helpers/images-helper";
+import { mainBcg } from "../assets/image-assets";
 // ==== Helpers ====
 
 const Hero = ({ img, title, max, children, color }) => {
   return (
-    <HeroWrapper max={max} img={img}>
+    <HeroWrapper max={max} img={img} data-aos="fade-in">
       <div className="banner">
         <h1 className="title">{title}</h1>
         {children}
@@ -24,6 +24,7 @@ const HeroWrapper = styled.div`
   min-height: ${(props) => (props.max ? "100vh" : "60vh")};
   background: linear-gradient(var(--primaryRGBA), var(--primaryRGBA)),
     url(${(props) => props.img}) center/cover no-repeat;
+    box-shadow:0px 1px 1px rgba(0, 0, 0, 0.3);
   .title {
     color: var(--mainWhite);
     padding: 2rem;
@@ -33,6 +34,9 @@ const HeroWrapper = styled.div`
     letter-spacing: var(--mainSpacing);
     /* word-break:break-word; */
   }
+  /* .banner{
+    width:100%;
+  } */
 `;
 
 Hero.defaultProps = {

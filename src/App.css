@@ -5,10 +5,21 @@
   --primaryRGBA: rgba(0, 0, 0, 0.3);
   --mainGrey: #fafafa;
   --darkGrey: #5f5e5e;
+  --lightGrey: #cdcdcd;
+  --gradientGrey: linear-gradient(
+    90deg,
+    rgba(205, 205, 205, 1) 0%,
+    rgba(250, 250, 250, 1) 100%
+  );
   --mainWhite: #fff;
   --mainBlack: #222;
   --mainTransition: all 0.3s ease-in-out;
   --mainSpacing: 0.3rem;
+}
+
+#root {
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 body {
@@ -30,8 +41,11 @@ body {
 
 .main-link {
   padding: 0.5rem 1rem;
+  min-width: 325px;
+  text-align: center;
   background: var(--primaryColor);
   color: var(--mainWhite);
+  font-size: 14px;
   display: inline-block;
   text-transform: uppercase;
   letter-spacing: var(--mainSpacing);
@@ -47,10 +61,6 @@ body {
   outline-color: var(--darkGrey);
 }
 
-.cart-icon:hover {
-  cursor: pointer;
-}
-
 .noselect {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -60,7 +70,25 @@ body {
   user-select: none;
 }
 
-/* 
-div[class^="ant"] {
-  color: #5fb7ea;
-} */
+/* Styled scrollbar */
+
+.styled-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  position: absolute;
+}
+
+.styled-scrollbar::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.styled-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--primaryColor);
+  border-radius: 10px;
+}
+
+/* Mobile version */
+@media only screen and (min-width: 320px) and (max-width: 991px) {
+  .main-link {
+    min-width: 255px;
+  }
+}

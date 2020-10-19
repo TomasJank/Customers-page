@@ -4,38 +4,32 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 // ==== Icons ====
-import { FaBars } from "react-icons/fa";
-import { MdStoreMallDirectory } from "react-icons/md";
+import { FaUsers } from "react-icons/fa";
 // ==== Icons ====
 
 // ==== Components ====
 import LangTag from "./LangTag";
+import HamburgetIcon from "./HamburgerIcon";
 // ==== Components ====
 
 // ==== Context API ====
 import { ProductConsumer } from "../context/";
 // ==== Context API ====
-
-// ==== Redux ====
-import { connect } from "react-redux";
-import { changeLang } from "../redux/actions";
-// ==== Redux ====
-
 const Navbar = (props) => {
   const {
     intl: { formatMessage },
   } = props;
-
   return (
     <ProductConsumer>
       {(value) => {
-        const { handleSidebar } = value;
+        const { handleSidebar, sidebarOpen } = value;
         return (
           <NavWrapper>
             <div className="nav-center">
-              <FaBars className="nav-icon" onClick={handleSidebar} />
+              <HamburgetIcon open={sidebarOpen} onClick={handleSidebar} />
+              {/* <FaBars className="nav-icon" onClick={handleSidebar} /> */}
               <Link to="/" style={{ textDecoration: "none" }}>
-                <MdStoreMallDirectory className="logo" size={40} />
+                <FaUsers className="logo" size={30} />
                 <span className="text-main font-weight-bold noselect">
                   {" "}
                   {formatMessage({ id: "customersManagement" })}
@@ -58,7 +52,7 @@ const NavWrapper = styled.nav`
   z-index: 10;
   padding: 1rem 1.5rem;
   background: var(--mainGrey);
-  border-bottom: 3px solid var(--primaryColor);
+  border-bottom: 3px solid var(--darkGrey);
   .nav-center {
     display: flex;
     align-items: center;
@@ -95,4 +89,4 @@ const NavWrapper = styled.nav`
   }
 `;
 
-export default connect(null, { changeLang })(injectIntl(Navbar));
+export default (injectIntl(Navbar));
